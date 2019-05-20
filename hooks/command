@@ -52,6 +52,21 @@ read_tags() {
 
   if read_list_property "${property}"; then
     tags+=("${result[@]}")
+    echo "Tags Built: ${tags}"
+  fi
+}
+
+validate_tags() {
+  local _tag="${1}"
+
+  valid_expression="[^[:alpha:][:digit:]._-]"
+  if [[ ${1} =~ $valid_expression ]]; then
+      eval tag_validate_result+=`echo "${1}" | sed -e "s/[^[:alpha:][:digit:]._-]/-/g"`
+      # echo "Tag Updated: ${tag_validate_result}"
+      echo $tag_validate_result
+  else
+      # echo "Valid Docker Tag: ${1}"
+      echo ${1}
   fi
 }
 
@@ -69,7 +84,10 @@ read_list_property() {
     local property="${prefix}_${i}"
 
     while [[ -n ${!property:-} ]]; do
-      result+=("${!property}")
+
+      # result+=("${!property}")
+      res=$(validate_tags ${!property})
+      result+=("${!res}")
 
       i=$((i+1))
       property="${prefix}_${i}"
