@@ -87,7 +87,7 @@ read_list_property() {
 
       # result+=("${!property}")
       res=$(validate_tags ${!property})
-      result+=("${!res}")
+      result+=("${res}")
 
       i=$((i+1))
       property="${prefix}_${i}"
